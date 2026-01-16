@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Archive | 강시현</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+
+        :root {
+            --neon-blue: #00d2ff;
+            --deep-dark: #0a0c10;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --accent-red: #ff3e3e;
+            --menu-bg: rgba(10, 12, 16, 0.98);
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--deep-dark);
+            color: #ffffff;
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 배경 효과 */
+        .bg-glow {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 80vw; height: 80vh;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.03) 0%, rgba(0,0,0,0) 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        /* 햄버거 메뉴 */
+        .hamburger {
+            position: fixed; top: 25px; right: 25px;
+            width: 50px; height: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-blue);
+            border-radius: 12px;
+            cursor: pointer; z-index: 1000;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; gap: 6px;
+            transition: 0.3s;
+        }
+        .hamburger span { width: 25px; height: 2px; background: var(--neon-blue); transition: 0.3s; }
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .nav-menu {
+            position: fixed; top: 0; right: -100%;
+            width: 280px; height: 100vh;
+            background: var(--menu-bg);
+            border-left: 1px solid var(--neon-blue);
+            z-index: 999;
+            display: flex; flex-direction: column;
+            justify-content: center; padding: 40px;
+            transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .nav-menu.active { right: 0; }
+        .nav-menu a {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff; text-decoration: none;
+            font-size: 1.1rem; margin: 20px 0;
+            letter-spacing: 2px; transition: 0.3s;
+        }
+        .nav-menu a:hover { color: var(--neon-blue); transform: translateX(10px); }
+
+        /* 섹션 공통 스타일 */
+        section { min-height: 100vh; padding: 80px 20px; display: flex; justify-content: center; align-items: center; }
+        .container { width: 100%; max-width: 1100px; }
+        h2.section-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-blue); font-size: 2rem;
+            margin-bottom: 40px; text-transform: uppercase;
+            border-left: 4px solid var(--neon-blue); padding-left: 15px;
+        }
+
+        /* [섹션 1] 메인 프로필 */
+        .profile-grid {
+            display: grid; grid-template-columns: 400px 1fr; gap: 40px;
+            background: var(--glass-bg); padding: 40px;
+            border-radius: 25px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .image-box img {
+            width: 100%; border-radius: 15px;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.1);
+        }
+        .info-box h1 { font-size: 3rem; margin: 0 0 10px 0; color: #fff; }
+        .status-tag { color: var(--accent-red); font-family: 'Orbitron', sans-serif; font-size: 0.9rem; margin-bottom: 30px; display: block; }
+        .stat-list { list-style: none; padding: 0; }
+        .stat-list li { margin: 15px 0; font-size: 1.1rem; color: #ccc; }
+        .stat-list b { color: var(--neon-blue); width: 100px; display: inline-block; }
+
+        /* [섹션 2] 과거 기록 */
+        .story-section { background: rgba(255, 255, 255, 0.02); }
+        .story-card {
+            background: rgba(0,0,0,0.4); border: 1px solid #333;
+            border-radius: 20px; overflow: hidden;
+        }
+        .story-header {
+            background: rgba(0, 210, 255, 0.1); padding: 20px;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s;
+        }
+        .story-header:hover { background: rgba(0, 210, 255, 0.2); }
+        .story-content {
+            max-height: 0; overflow: hidden; transition: 0.5s ease-in-out;
+            padding: 0 30px; line-height: 1.8; color: #bbb;
+        }
+        .story-content.active { max-height: 800px; padding: 40px 30px; }
+
+        /* [섹션 3] 갤러리 - 1216*832 비율 최적화 */
+        .gallery-grid {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* 가로가 넓으므로 한 줄에 2개씩 배치 */
+            gap: 25px;
+        }
+        .gallery-item {
+            /* 사진 비율 1216:832 유지 (약 1.46:1) */
+            aspect-ratio: 1216 / 832; 
+            background: #111; border-radius: 15px;
+            overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+            position: relative;
+        }
+        .gallery-item:hover { 
+            transform: scale(1.02); 
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
+        }
+        .gallery-item img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; /* 비율에 맞춰 꽉 채움 */
+            opacity: 0.7; transition: 0.4s; 
+        }
+        .gallery-item:hover img { opacity: 1; }
+        
+        /* 사진 하단 캡션 효과 (선택사항) */
+        .gallery-item::after {
+            content: "VIEW ARCHIVE";
+            position: absolute; bottom: -30px; left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron'; font-size: 0.7rem;
+            color: var(--neon-blue); transition: 0.3s;
+            opacity: 0;
+        }
+        .gallery-item:hover::after { bottom: 15px; opacity: 1; }
+
+        /* [섹션 4] 개발자 노트 */
+        .dev-box {
+            background: var(--glass-bg); border-radius: 20px; padding: 40px;
+            border-left: 5px solid var(--neon-blue);
+        }
+        .dev-box p { color: #888; line-height: 1.8; margin-bottom: 20px; }
+
+        @media (max-width: 850px) {
+            .profile-grid { grid-template-columns: 1fr; text-align: center; }
+            .image-box { max-width: 300px; margin: 0 auto; }
+            .gallery-grid { grid-template-columns: 1fr; } /* 모바일은 한 줄에 1개씩 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+
+    <nav class="nav-menu">
+        <a href="#profile" onclick="toggleMenu()">강시현 소개</a>
+        <a href="#history" onclick="toggleMenu()">과거 기록 열람</a>
+        <a href="#gallery" onclick="toggleMenu()">사진 미리보기</a>
+        <a href="#devnote" onclick="toggleMenu()">개발자 노트</a>
+    </nav>
+
+    <!-- [섹션 1] 프로필 -->
+    <section id="profile">
+        <div class="container">
+            <div class="profile-grid">
+                <!-- 왼쪽: 이미지 (비율 유지) -->
+                <div class="image-box">
+                    <img src="ID.png" alt="강시현" onerror="this.src='https://via.placeholder.com/400x550/0a0c10/00d2ff?text=KANG+SIHYUN'">
+                </div>
+                
+                <!-- 오른쪽: 풍성해진 정보창 -->
+                <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span class="status-tag">>> SYSTEM: FIRST LOVE DISQUALIFIED / PHASE 01</span>
+                        <h1>강시현 <span style="font-size: 1.2rem; color: #888; font-family: 'Noto Sans KR';">24세 / 167cm</span></h1>
+                        
+                        <!-- 캐릭터 해시태그 -->
+                        <div style="margin: 15px 0;">
+                            <span class="tag-small">#집착_순애</span>
+                            <span class="tag-small">#완벽주의</span>
+                            <span class="tag-small">#재설계자</span>
+                            <span class="tag-small">#스토커(?)</span>
+                        </div>
+
+                        <!-- 상세 능력치 (바 형태) - 공간을 많이 차지하면서도 시각적으로 좋습니다 -->
+                        <div class="status-bars" style="margin-top: 30px;">
+                            <div class="bar-item" style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
+                                    <span>현재 분노 수치 (ANGER)</span>
+                                    <span>98%</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: #222; border-radius: 3px;">
+                                    <div style="width: 98%; height: 100%; background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red);"></div>
+                                </div>
+                            </div>
+                            <div class="bar-item" style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
+                                    <span>독점욕 (POSSESSIVENESS)</span>
+                                    <span>120% (OVERLOAD)</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: #222; border-radius: 3px;">
+                                    <div style="width: 100%; height: 100%; background: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue);"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 기본 상세 정보 -->
+                        <ul class="stat-list" style="margin-top: 25px;">
+                            <li><b>MBTI</b> ENTJ-A (단호한 통치자)</li>
+                            <li><b>LIKE</b> 완벽하게 정리된 당신의 일상, 12년 전의 사탕 껍질</li>
+                            <li><b>HATE</b> 당신의 무기력함, 당신 주변의 불필요한 인맥</li>
+                            <li><b>STATUS</b> "책임져. 내 추억을 더럽힌 대가."</li>
+                        </ul>
+                    </div>
+
+                    <!-- 하단 강조 문구 박스 (공간 채우기용) -->
+                    <div style="background: rgba(255, 255, 255, 0.03); padding: 20px; border: 1px dashed rgba(0, 210, 255, 0.3); border-radius: 10px; margin-top: 20px;">
+                        <p style="margin: 0; font-size: 0.9rem; color: #aaa; line-height: 1.6;">
+                            <span style="color: var(--neon-blue); font-weight: bold;">[!] 주의사항:</span><br>
+                            강시현은 당신의 모든 소비 패턴과 외출 동선을 실시간으로 모니터링하고 있습니다. 
+                            어떻게 모니터링 하고있는지는 알려고 하면 다칩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSS 추가 (기존 <style> 태그 안에 추가하세요) -->
+    <style>
+        .tag-small {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            border-radius: 4px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        /* 기존 info-box에 align-self 적용을 위해 그리드 수정 */
+        .profile-grid {
+            align-items: stretch; /* 사진 높이에 맞춰 오른쪽 박스도 늘어납니다 */
+        }
+    </style>
+
+    <!-- [섹션 2] 과거 기록 -->
+    <section id="history" class="story-section">
+        <div class="container">
+            <h2 class="section-title">Past Archive</h2>
+            <div class="story-card">
+                <div class="story-header" onclick="toggleStory()">
+                    <span style="font-family: 'Orbitron'; letter-spacing: 2px;">FILE_NO: 20120412_RECORD</span>
+                    <span id="toggle-icon">[+] 열람하기</span>
+                </div>
+                <div id="storyContent" class="story-content">
+                    <p><b>기록 01:</b> 12년 전 이별하던 날, 그녀가 당신의 손에 쥐여준 사탕 껍질은 아직도 그녀의 보석함 속에 들어있습니다. 그녀에게 당신은 단순한 첫사랑 그 이상이었습니다.</p>
+                    <p><b>기록 02:</b> 24세가 된 강시현은 이제 누구에게도 휘둘리지 않는 위치에 섰지만, 오직 당신의 소식 앞에서는 평정심을 잃었습니다. 수소문 끝에 찾아낸 당신의 초라한 모습은 그녀에게 깊은 상실감을 주었습니다.</p>
+                    <p><b>기록 03:</b> "내 기억 속의 넌 누구보다 빛났어." 그녀는 당신을 원망하기보다, 당신을 그렇게 만든 환경을 증오합니다. 그래서 그녀는 당신을 자신의 곁에 두고 다시 '완벽하게' 재조립하기로 했습니다.</p>
+                    <p><b>방침:</b> 모든 소비, 동선, 대인관계는 그녀의 검토를 거쳐야 합니다. 이것은 처벌이자, 그녀가 당신을 사랑하는 유일한 방식입니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [섹션 3] 갤러리 -->
+    <section id="gallery">
+        <div class="container">
+            <h2 class="section-title">Gallery</h2>
+            <div class="gallery-grid">
+                <!-- 일반 이미지 (1~4번) -->
+                <div class="gallery-item"><img src="A3.png" onerror="this.src='https://via.placeholder.com/1216x832/0a0c10/00d2ff?text=A3.png'"></div>
+                <div class="gallery-item"><img src="A5.png" onerror="this.src='https://via.placeholder.com/1216x832/0a0c10/00d2ff?text=A5.png'"></div>
+                <div class="gallery-item"><img src="A15.png" onerror="this.src='https://via.placeholder.com/1216x832/0a0c10/00d2ff?text=A15.png'"></div>
+                <div class="gallery-item"><img src="A18.png" onerror="this.src='https://via.placeholder.com/1216x832/0a0c10/00d2ff?text=A18.png'"></div>
+            </div>
+
+            <!-- H-이미지 잠금 해제 버튼 -->
+            <div class="h-unlock-wrapper" style="margin-top: 30px; text-align: center;">
+                <div class="story-toggle" id="hBtn" onclick="toggleHGallery()" style="border-color: var(--accent-red); color: var(--accent-red); background: rgba(255, 62, 62, 0.05);">
+                    [ H-이미지 기록 확인하기... ]
+                </div>
+            </div>
+
+            <!-- 숨겨진 H-이미지 (5~8번) -->
+            <div id="hGallery" class="gallery-grid" style="max-height: 0; overflow: hidden; transition: max-height 0.8s ease-in-out; margin-top: 0;">
+                <div class="gallery-item" style="margin-top: 25px;"><img src="H1a.png" onerror="this.src='https://via.placeholder.com/1216x832/ff3e3e/ffffff?text=H1a.png'"></div>
+                <div class="gallery-item" style="margin-top: 25px;"><img src="H6a.png" onerror="this.src='https://via.placeholder.com/1216x832/ff3e3e/ffffff?text=H6a.png'"></div>
+                <div class="gallery-item" style="margin-top: 25px;"><img src="H9b.png" onerror="this.src='https://via.placeholder.com/1216x832/ff3e3e/ffffff?text=H9b.png'"></div>
+                <div class="gallery-item" style="margin-top: 25px;"><img src="H11b.png" onerror="this.src='https://via.placeholder.com/1216x832/ff3e3e/ffffff?text=H11b.png'"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 기존 메뉴 토글 함수
+        function toggleMenu() {
+            document.querySelector('.hamburger').classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        }
+
+        // 기존 스토리 토글 함수
+        function toggleStory() {
+            const content = document.getElementById('storyContent');
+            const icon = document.getElementById('toggle-icon');
+            content.classList.toggle('active');
+            icon.innerText = content.classList.contains('active') ? "[-] 닫기" : "[+] 열람하기";
+        }
+
+        // 새롭게 추가된 H-갤러리 토글 함수
+        function toggleHGallery() {
+            const hGallery = document.getElementById('hGallery');
+            const hBtn = document.getElementById('hBtn');
+            
+            if (hGallery.style.maxHeight === '0px' || hGallery.style.maxHeight === '') {
+                hGallery.style.maxHeight = '2000px'; // 충분히 큰 값으로 설정
+                hBtn.innerText = "[ H-이미지 기록 숨기기 ]";
+                hBtn.style.background = "var(--accent-red)";
+                hBtn.style.color = "#fff";
+            } else {
+                hGallery.style.maxHeight = '0px';
+                hBtn.innerText = "[ H-이미지 기록 확인하기... ]";
+                hBtn.style.background = "rgba(255, 62, 62, 0.05)";
+                hBtn.style.color = "var(--accent-red)";
+            }
+        }
+    </script>
+
+    <!-- [섹션 4] 개발자 노트 -->
+    <section id="devnote">
+        <div class="container">
+            <h2 class="section-title">Developer Note</h2>
+            <div class="dev-box">
+                <p>여기까지 읽고 계시다니 상당한 독해 능력을 가진 뤼붕이시군요!</p>
+                <p><b>Character Insight:</b> 강시현의 24세는 가장 열정적이면서도 독선적인 나이입니다. 그녀의 '관심'은 때로 숨이 막히지만, 그 기저에는 12년 전 이별의 상처가 깔려 있다는 점을 대화에서 활용해 보세요.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.hamburger').classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        }
+
+        function toggleStory() {
+            const content = document.getElementById('storyContent');
+            const icon = document.getElementById('toggle-icon');
+            content.classList.toggle('active');
+            icon.innerText = content.classList.contains('active') ? "[-] 닫기" : "[+] 열람하기";
+        }
+    </script>
+</body>
+</html>
