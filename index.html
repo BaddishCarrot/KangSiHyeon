@@ -323,6 +323,64 @@
         </div>
     </section>
 
+    <!-- [섹션 5] 대화 바로가기 (CTA) -->
+    <section id="chat-link" style="min-height: auto; padding: 100px 20px; text-align: center; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0, 210, 255, 0.05));">
+        <div class="container">
+            <div style="margin-bottom: 30px; font-family: 'Orbitron'; color: var(--accent-red); font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8;">
+                FINAL WARNING: AUTHORIZATION REQUIRED
+            </div>
+            
+            <a href="https://share.crack.wrtn.ai/m7r20b" target="_blank" class="cta-button">
+                [ 지금 강시현 만나러 가기 ]
+            </a>
+            
+            <p style="margin-top: 25px; color: #555; font-size: 0.85rem; letter-spacing: 1px;">
+                ※ 버튼 클릭 시 인생 압류 절차가 즉시 시작됩니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- 하단 푸터 (선택 사항) -->
+    <footer style="padding: 50px; text-align: center; color: #333; font-size: 0.8rem; font-family: 'Orbitron'; letter-spacing: 1px;">
+        &copy; 2024 KANG SI-HYEON ARCHIVE. ALL RIGHTS RESERVED.
+    </footer>
+
+    <!-- 버튼 전용 스타일 (기존 <style> 태그 안에 추가하세요) -->
+    <style>
+        .cta-button {
+            display: inline-block;
+            padding: 25px 60px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-decoration: none;
+            border: 2px solid var(--neon-blue);
+            border-radius: 60px;
+            background: rgba(0, 210, 255, 0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background: var(--neon-blue);
+            color: var(--deep-dark);
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.6);
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        /* 모바일용 버튼 크기 조정 */
+        @media (max-width: 600px) {
+            .cta-button {
+                font-size: 1.2rem;
+                padding: 20px 40px;
+                width: 90%;
+            }
+        }
+    </style>
+
     <script>
         function toggleMenu() {
             document.querySelector('.hamburger').classList.toggle('active');
